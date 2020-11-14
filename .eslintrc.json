@@ -5,11 +5,8 @@
     "node": true
   },
   "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
     "plugin:react/recommended",
-    "plugin:jest/recommended",
-    "plugin:cypress/recommended"
+    "plugin:jest/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -20,7 +17,7 @@
     },
     "project": "./tsconfig.json"
   },
-  "plugins": ["react", "jest", "@typescript-eslint", "cypress"],
+  "plugins": ["react", "jest", "@typescript-eslint"],
   "settings": {
     "react": {
       "version": "16.13.1"
