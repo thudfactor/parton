@@ -1,15 +1,23 @@
-import React from "react"
+import ColorMatrix from "./components/ColorMatrix"
+import ColorSelect from "./components/ColorSelect"
 import StyledForm from "./styles"
 
 function App() {
+
   return (
     <StyledForm>
-      <form>
-        <input type="text" placeholder="Full name" />
-        <input type="text" placeholder="Email" />
-        <input type="text" placeholder="Password" />
-        <button>Sign In</button>
-      </form>
+      <div className="forms">
+        <ColorSelect 
+          label="Background Color" 
+          name="bgcolor" 
+        />
+        <ColorSelect 
+          label="Foreground Color"
+          name="fgcolor" 
+        />
+      </div>
+
+      <ColorMatrix />
     </StyledForm>
   )
 }
