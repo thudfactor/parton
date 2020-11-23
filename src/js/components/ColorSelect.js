@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { addColor } from '../actions';
+import { addColor } from '../store';
 
 const ColorSelect = ({label, name}) => {
 

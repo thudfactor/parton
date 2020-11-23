@@ -1,6 +1,7 @@
 import ColorMatrix from "./components/ColorMatrix"
 import ColorSelect from "./components/ColorSelect"
-import StyledForm from "./styles"
+import Preferences from "./components/Preferences"
+import StyledForm from "../styles"
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           label="Foreground Color"
           name="fgcolor" 
         />
+        <Preferences />
       </div>
 
       <ColorMatrix />
