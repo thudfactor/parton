@@ -4,54 +4,19 @@ import ColorCell from '../components/ColorCell';
 export default function ColorMatrix() {
   const bgcolors = useSelector(state => state.bgcolor)
   const fgcolors = useSelector(state => state.fgcolor)
+  const linkcolors = useSelector(state => state.linkcolor)
+  const hovercolors = useSelector(state => state.hovercolor)
 
-  /*
-  function buildMatrix() {
-    const { fg, bg } = colors;
-    matrix.style.gridTemplateColumns = `repeat(${bg.length}, 1fr)`;
-    matrix.innerHTML = null;
-    const working = document.createDocumentFragment();
-    const delBGButton = document.createElement("button");
-    const delBGText = document.createTextNode("X Background");
-    delBGButton.appendChild(delBGText);
-    delBGButton.classList.add("remove-background");
-  
-    const delFGButton = document.createElement("button");
-    const delFGText = document.createTextNode("X Color");
-    delFGButton.appendChild(delFGText);
-    delFGButton.classList.add("remove-color");
-  
-    fg.forEach((fgc, fgi) => {
-      const cellTemplate = document.createElement("div");
-      const fgText = document.createElement("p");
-      const colorText = document.createTextNode(`text: ${fgc}`);
-      fgText.appendChild(colorText);
-      cellTemplate.style.color = fgc;
-      cellTemplate.appendChild(delFGButton.cloneNode(true));
-      cellTemplate.appendChild(delBGButton.cloneNode(true));
-      cellTemplate.appendChild(fgText);
-  
-      bg.forEach((bgc, bgi) => {
-        const cell = cellTemplate.cloneNode(true);
-        const bgText = document.createElement("p");
-        bgText.innerHTML = `background: ${bgc}`;
-        cell.style.backgroundColor = bgc;
-        cell.dataset.bgindex = bgi;
-        cell.dataset.fgindex = fgi;
-  
-        cell.appendChild(bgText);
-        working.appendChild(cell);
-      });
-    });
-    matrix.appendChild(working);
-  }
-  */
-
-  const addBgRow = (bgcolor,index) => {
-    return fgcolors.map((fgcolor,index) => {
-      return (
-        <ColorCell fgcolor={fgcolor} bgcolor={bgcolor} key={`cell-${bgcolor}-${fgcolor}`} />
-      )
+  const addBgRow = (bgcolor) => {
+    return fgcolors.map((fgcolor) => {
+      return linkcolors.map((linkcolor) => {
+        return hovercolors.map((hovercolor) => {
+          if (hovercolor === linkcolor) return '';
+          return (
+            <ColorCell hovercolor={hovercolor} linkcolor={linkcolor} fgcolor={fgcolor} bgcolor={bgcolor} key={`cell-${bgcolor}-${fgcolor}-${linkcolor}=${hovercolor}`} />
+          )
+        })
+      })
     })
   }
 
@@ -68,8 +33,10 @@ export default function ColorMatrix() {
       gridClasses += `grid-cols-2 md:grid-cols-3`;
     break;
     case 4:
+    default:
       gridClasses += `grid-cols-2 md:grid-cols-4`;
     break;
+    /*
     case 5:
       gridClasses += `grid-cols-2 md:grid-cols-4 lg:grid-cols-5`;
     break;
@@ -82,8 +49,7 @@ export default function ColorMatrix() {
     case 8:
       gridClasses += `grid-cols-8`;
     break;
-    default:
-      gridClasses += `grid-cols-8`;
+    */
   }
 
   return (

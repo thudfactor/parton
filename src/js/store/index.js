@@ -1,19 +1,38 @@
 import { configureStore, getDefaultMiddleware, createSlice } from "@reduxjs/toolkit"
 import { colorDuplicationCheck } from "../middleware";
+import storage from "redux-persist/lib/storage";
+
+export const config = {
+  key: 'root',
+  storage: storage,
+}
 
 const initialState = {
   bgcolor: ['#ffffff'],
   fgcolor: ['#000000'],
+  linkcolor: ['#000099'],
+  hovercolor: ['#0000ff'],
   hideFailures: false
 }
 
+const rehydrate = {};
+Object.keys(initialState).forEach((key) => {
+  const retrieved = localStorage.getItem(key);
+  if(retrieved) {
+    rehydrate[key] = JSON.parse(retrieved);
+  } else {
+    console.log("Nope", key);
+  }
+})
+
 const rootSlice = createSlice({
   name: "root",
-  initialState: initialState,
+  initialState: { ...initialState,...rehydrate },
   reducers: {
     addColor: (state, action) => {
       const { name, color } = action.payload;
-      state[name] = state[name].concat(color);  
+      state[name] = state[name].concat(color);
+      localStorage.setItem(name,JSON.stringify(state[name]));
     },
     removeColor: (state, action) => {
       console.log("Remove Color");
@@ -21,8 +40,10 @@ const rootSlice = createSlice({
     replaceColor: (state, action) =>{
       console.log("Replace Color")
     },
-    changeFailureDisplay: (state) => {
-      state.hideFailures = !state.hideFailures
+    setBoolProp: (state, action) => {
+      const { name, value } = action.payload;
+      state[name] = value;
+      localStorage.setItem(name,JSON.stringify(state[name]));
     },
     displayWarning: (state, action) => {
 
@@ -30,11 +51,13 @@ const rootSlice = createSlice({
   }
 });
 
+
+
 export const { 
   addColor, 
   removeColor, 
   replaceColor,
-  changeFailureDisplay, 
+  setBoolProp, 
   displayWarning 
 } = rootSlice.actions;
 const rootReducer = rootSlice.reducer;

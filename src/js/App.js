@@ -16,6 +16,14 @@ function App() {
           label="Foreground Color"
           name="fgcolor" 
         />
+        <ColorSelect 
+          label="Link Color"
+          name="linkcolor" 
+        />
+        <ColorSelect 
+          label="Link Hover Color"
+          name="hovercolor" 
+        />        
         <Preferences />
       </div>
 
