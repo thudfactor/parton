@@ -4,7 +4,7 @@ import { addColor } from '../store';
 
 const ColorSelect = ({label, name}) => {
 
-  const colors = useSelector(state => state[name]);
+  const colors = useSelector(state => state.color);
   const dispatch = useDispatch();
 
   const [ color, setColor ] = useState(colors[colors.length-1]);
@@ -21,7 +21,7 @@ const ColorSelect = ({label, name}) => {
           name={ name } 
           id={`cs-${name}`} 
           onChange={(e => setColor(e.target.value))} />
-        <button className={`${(colorPresent) ? 'text-gray-500' : 'text-black'}`} disabled={colorPresent} onClick={() => dispatch(addColor({name, color}))} id="bgAdd">Add</button>
+        <button className={`${(colorPresent) ? 'text-gray-500' : 'text-black'}`} disabled={colorPresent} onClick={() => dispatch(addColor(color))} id="bgAdd">Add</button>
       </p>
     </div>  
   )

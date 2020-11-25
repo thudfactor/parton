@@ -8,11 +8,9 @@ export const config = {
 }
 
 const initialState = {
-  bgcolor: ['#ffffff'],
-  fgcolor: ['#000000'],
-  linkcolor: ['#000099'],
-  hovercolor: ['#0000ff'],
-  hideFailures: false
+  color: ['#ffffff','#000000','#ff0000'],
+  hideFailures: false,
+  testLinks: false
 }
 
 const rehydrate = {};
@@ -30,12 +28,19 @@ const rootSlice = createSlice({
   initialState: { ...initialState,...rehydrate },
   reducers: {
     addColor: (state, action) => {
-      const { name, color } = action.payload;
-      state[name] = state[name].concat(color);
-      localStorage.setItem(name,JSON.stringify(state[name]));
+      const color = action.payload;
+      state.color.push(color);
+      localStorage.setItem('color',JSON.stringify(state.color));
     },
     removeColor: (state, action) => {
-      console.log("Remove Color");
+      // middleware here to change link color setting 
+      // if number of colors drops below 3
+      state.color = state.color.filter(c => c !== action.payload)
+      localStorage.setItem('color',JSON.stringify(state.color));
+      if (state.color.length < 3) {
+        state.testLinks = false;
+        localStorage.setItem('testLinks',JSON.stringify(false));
+      }
     },
     replaceColor: (state, action) =>{
       console.log("Replace Color")
@@ -50,8 +55,6 @@ const rootSlice = createSlice({
     }
   }
 });
-
-
 
 export const { 
   addColor, 
