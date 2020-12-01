@@ -1,5 +1,5 @@
 import {useSelector, useDispatch} from 'react-redux'
-import { setBoolProp } from '../store'
+import { setProp } from '../store'
 
 export default function ToggleProp({label, name, disabled=false}) {
   const propValue = useSelector(state => state[name]);
@@ -13,7 +13,7 @@ export default function ToggleProp({label, name, disabled=false}) {
           checked={propValue} 
           value={propValue}
           disabled={disabled}
-          onChange={() => dispatch(setBoolProp({name, value:!propValue}))} /> {label}</label>
+          onChange={() => dispatch(setProp({name, value:!propValue}))} /> {label}</label>
     </div>
   )
 }

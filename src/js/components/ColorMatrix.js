@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import ColorCell from '../components/ColorCell';
+import { useSelector } from "react-redux"
+import ColorCell from '../components/ColorCell'
 import { hex, score } from 'wcag-contrast'
 
 const contrast = (c1,c2) => {
@@ -29,34 +29,39 @@ const permutations = (colors, permutationSize, hideFailures = false) => {
       counters[carry] = (counters[carry] + 1);
       if(counters[carry] % colorLength !== 0) break;
     }
-    //console.log(counters);
+
     iter++;    
   }
 
   const colorData = collector.map(perm => {
-    const [bgcolor,fgcolor,linkcolor=null,hovercolor=null] = perm
+    const [bgcolor,fgcolor,linkcolor=null] = perm
     const key = `ColorCell-${perm.join('-')}`
     const fgbgratio = contrast(fgcolor,bgcolor)
     const linkfgratio = (linkcolor) ? contrast(fgcolor,linkcolor) : 100
     const linkbgratio = (linkcolor) ? contrast(linkcolor,bgcolor) : 100
-    const hoverbgratio = (hovercolor) ? contrast(hovercolor,bgcolor) : 100
-    const failed = (fgbgratio < 3) || (linkbgratio < 3) || (hoverbgratio < 3)
+    const failed = (fgbgratio < 3) || (linkbgratio < 3)
 
     return {
       key,
       bgcolor,
       fgcolor,
       linkcolor,
-      hovercolor,
       fgbgratio,
       linkfgratio,
       linkbgratio,
-      hoverbgratio,
       failed,
     }
   })
 
-  return (hideFailures) ? colorData.filter(cd => !cd.failed ) : colorData;
+  const filtered = colorData.filter(cd => !cd.failed );
+
+  const results = (hideFailures) ? filtered : colorData;
+
+  return [
+    results,
+    filtered.length,
+    colorData.length
+  ]
 }
 
 
@@ -65,13 +70,7 @@ export default function ColorMatrix() {
   const testLinks = useSelector(state => state.testLinks)
   const hideFailures = useSelector(state => state.hideFailures)
 
-  const cellGenerator = () => {
-    const permutationSet = permutations(colors, testLinks ? 3 : 2, hideFailures);
-
-    return permutationSet.map((cellData) => 
-      <ColorCell colors={cellData} key={cellData.key} />
-    )
-  }
+  const [permutationSet, resultLength, fullLength] = permutations(colors, testLinks ? 3 : 2, hideFailures);
 
   let gridClasses = 'w-full grid gap-2 ';
 
@@ -89,25 +88,23 @@ export default function ColorMatrix() {
     default:
       gridClasses += `grid-cols-2 md:grid-cols-4`;
     break;
-    /*
-    case 5:
-      gridClasses += `grid-cols-2 md:grid-cols-4 lg:grid-cols-5`;
-    break;
-    case 6:
-      gridClasses += `grid-cols-2 md:grid-cols-3 lg:grid-cols-6`;
-    break;
-    case 7:
-      gridClasses += `grid-cols-7`;
-    break;
-    case 8:
-      gridClasses += `grid-cols-8`;
-    break;
-    */
   }
 
   return (
-    <div className={gridClasses}>
-      { cellGenerator() }
-    </div>
+    <>
+      <div>
+        {
+          (resultLength !== fullLength) &&
+          <p>There are { resultLength } passing combinations out of { fullLength } possibilities.</p>
+        }
+        {
+          (resultLength === fullLength) && 
+          <p>There are { resultLength } combinations.</p>
+        }
+      </div>
+      <div className={gridClasses}>
+        { permutationSet.map((cellData) => <ColorCell colors={cellData} key={cellData.key} />) }
+      </div>
+    </>
   )
 }

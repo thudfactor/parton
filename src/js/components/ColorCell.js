@@ -1,5 +1,6 @@
 import { ColorCellWrapper, Swatch, Details, Link } from '../styles/'
-import InfoCell from './InfoCell';
+import InfoCell from './InfoCell'
+import { useSelector } from 'react-redux'
 
 export default function ColorCell({colors}) {
 
@@ -7,29 +8,53 @@ export default function ColorCell({colors}) {
     bgcolor,
     fgcolor,
     linkcolor,
-    hovercolor,
     fgbgratio,    
     linkfgratio,
     linkbgratio,
-    hoverbgratio,
     failed   
   } = colors;
+
+  const largeTreatment = useSelector(state => state.largeTreatment)
+
+  let swatchFontSize = '1rem';
+  let swatchFontWeight = 'normal';
+  let linkFontSize = '1rem';
+  let linkFontWeight = 'normal';  
+
+  if(fgbgratio >= 3 && fgbgratio < 4.5) {
+    if (largeTreatment === 'larger') {
+      swatchFontSize = `1.5rem`; // 18pt is 24px (roughly)
+    } else if (largeTreatment === 'bold') {
+      swatchFontSize = '1.15625rem';  // 14pt is 18.5px (roughly)
+      swatchFontWeight = 'bold'
+    }   
+  }
+
+  if(linkbgratio >= 3 && linkbgratio < 4.5) {
+    if (largeTreatment === 'larger') {
+      linkFontSize = `1.5rem`; // 18pt is 24px (roughly)
+    } else if (largeTreatment === 'bold') {
+      linkFontSize = '1.15625rem';  // 14pt is 18.5px (roughly)
+      linkFontWeight = 'bold'
+    }   
+  }
+
+  const linkDecoration = (linkfgratio <= 3) ? 'underline' : 'none'
 
   return (
   <ColorCellWrapper 
     bgcolor={bgcolor}
     failed={failed}
   >
-    <Swatch fgcolor={fgcolor} fgbgratio={fgbgratio}>
-      Harry, jogging quickly, axed zen monks with beef vapor. 
-      { linkcolor && <Link 
+    <Swatch fontSize={swatchFontSize} fontWeight={swatchFontWeight} fgcolor={fgcolor}>
+      Harry, jogging quickly, axed zen monks with beef vapor. { linkcolor && 
+      <Link 
+        fontSize={linkFontSize} 
+        fontWeight={linkFontWeight}
         linkcolor={linkcolor}
-        hovercolor={hovercolor || linkcolor}
-        linkfgratio={linkfgratio}      
+        linkDecoration={linkDecoration}     
         onClick={(e)=> { e.preventDefault() } }
-        onMouseOver={(e) => e.target.style.color = hovercolor } 
-        onMouseOut={(e) => e.target.style.color = linkcolor }
-        href="http://www.example.com">jogging quickly</Link> 
+        href="http://www.example.com">Click Here for More Info</Link> 
       }
     </Swatch>
     <Details>
@@ -37,13 +62,11 @@ export default function ColorCell({colors}) {
         <InfoCell label={"BG"}>{bgcolor}</InfoCell>
         <InfoCell label={"FG"}>{fgcolor}</InfoCell>
         { linkcolor && <InfoCell label={"A"}>{linkcolor}</InfoCell> }
-        { hovercolor && <InfoCell label={"Ah"}>{hovercolor}</InfoCell> }
       </dl>
       <dl>
         <InfoCell label={"FG:BG"}>{fgbgratio}</InfoCell>
         { linkcolor && <InfoCell label={"A:BG"}>{linkbgratio}</InfoCell> }
         { linkcolor && <InfoCell label={"A:FG"}>{linkfgratio}</InfoCell> }
-        { hovercolor && <InfoCell label={"Ah:BG"}>{hoverbgratio}</InfoCell> }
       </dl>
     </Details>
   </ColorCellWrapper>

@@ -10,7 +10,8 @@ export const config = {
 const initialState = {
   color: ['#ffffff','#000000','#ff0000'],
   hideFailures: false,
-  testLinks: false
+  testLinks: false,
+  largeTreatment: 'larger'
 }
 
 const rehydrate = {};
@@ -45,7 +46,7 @@ const rootSlice = createSlice({
     replaceColor: (state, action) =>{
       console.log("Replace Color")
     },
-    setBoolProp: (state, action) => {
+    setProp: (state, action) => {
       const { name, value } = action.payload;
       state[name] = value;
       localStorage.setItem(name,JSON.stringify(state[name]));
@@ -60,7 +61,7 @@ export const {
   addColor, 
   removeColor, 
   replaceColor,
-  setBoolProp, 
+  setProp, 
   displayWarning 
 } = rootSlice.actions;
 const rootReducer = rootSlice.reducer;

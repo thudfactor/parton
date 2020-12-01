@@ -8,9 +8,9 @@ function App() {
 
   return (
     <StyledForm>
+      <ColorSelect />
       <ColorSwatches />
       <div className="forms">
-        <ColorSelect />
         <Preferences />
       </div>
 

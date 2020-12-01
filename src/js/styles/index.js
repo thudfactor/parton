@@ -14,8 +14,9 @@ export const StyledForm = styled.main.attrs({
 export const Link = styled.a.attrs(
   props =>({
     style: {
-      textDecoration: (props.linkfgratio >= 3) ? 'none' : 'underline',
-      fontSize: (props.linkfgratio < 4.5 && props.linkfgratio >= 3) ? '1.5rem' : '1rem',
+      textDecoration: props.linkDecoration,
+      fontSize: props.fontSize,
+      fontWeight: props.fontWeight,
       color: props.linkcolor
     }
   }))``
@@ -24,7 +25,8 @@ export const Swatch = styled.div.attrs(
   props =>({
     style: {
       color: props.fgcolor,
-      fontSize: (props.fgbgratio < 4.5 && props.fgbgratio >= 3) ? '1.5rem' : '1rem'
+      fontSize: props.fontSize,
+      fontWeight: props.fontWeight,
     }
   })
 )`${tw`p-2`}`
@@ -39,3 +41,37 @@ export const ColorCellWrapper = styled.div.attrs(
     }
   }))`${tw`flex flex-col justify-between border-2`}`
 
+export const ColorSamples = styled.div`
+  ${tw`w-auto shadow my-6 mx-auto p-5 rounded-xl bg-white flex items-center justify-center`}
+`
+
+export const ColorSample = styled.div.attrs(
+  props => ({
+    style: {
+      backgroundColor: props.bgcolor
+    }
+  }))`
+  ${tw`flex items-center border-gray-900 border border-l-0 justify-center p-2`}
+
+  width: calc(10vw - 6px);
+  height: calc(10vw - 6px);
+
+  &:first-child {
+    ${tw`border-l rounded-l-lg`}
+  }
+
+  &:last-child {
+    ${tw`rounded-r-lg`}
+  }
+
+  button {
+    ${tw`rounded-lg bg-black border-2 text-xl opacity-0 border-white p-3 text-red-100 transition-opacity`}
+  }
+
+  &:hover {
+    button {
+      ${tw`opacity-100`}
+    }
+  }
+`
+  
