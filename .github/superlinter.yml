@@ -1,15 +1,14 @@
-name: Lint Code Base
+name: Super-Linter
 on: push
 jobs:
   super-lint:
-    name: Lint code base
+    name: Link code base
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Lint Code Base
+      - name: Run Super-Linter
         uses: github/super-linter@v3
         env:
           DEFAULT_BRANCH: trunk
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.json

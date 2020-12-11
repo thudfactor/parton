@@ -1,8 +1,9 @@
 export const largeTreatmentOptions = [
   {
     label: 'Larger',
-    value: 'larger',
-  }, {
+    value: 'larger'
+  },
+  {
     label: 'Bold',
     value: 'bold'
   }

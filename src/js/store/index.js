@@ -1,80 +1,68 @@
-import { configureStore, getDefaultMiddleware, createSlice } from "@reduxjs/toolkit"
-import { colorDuplicationCheck } from "../middleware";
-import storage from "redux-persist/lib/storage";
+import { configureStore, getDefaultMiddleware, createSlice } from '@reduxjs/toolkit'
+import { colorDuplicationCheck } from '../middleware'
+import storage from 'redux-persist/lib/storage'
 
 export const config = {
   key: 'root',
-  storage: storage,
+  storage: storage
 }
 
 const initialState = {
-  color: ['#ffffff','#000000','#ff0000'],
+  color: ['#ffffff', '#000000', '#ff0000'],
   hideFailures: false,
   testLinks: false,
   largeTreatment: 'larger'
 }
 
-const rehydrate = {};
-Object.keys(initialState).forEach((key) => {
-  const retrieved = localStorage.getItem(key);
-  if(retrieved) {
-    rehydrate[key] = JSON.parse(retrieved);
+const rehydrate = {}
+Object.keys(initialState).forEach(key => {
+  const retrieved = localStorage.getItem(key)
+  if (retrieved) {
+    rehydrate[key] = JSON.parse(retrieved)
   } else {
-    console.log("Nope", key);
+    console.log('Nope', key)
   }
 })
 
 const rootSlice = createSlice({
-  name: "root",
-  initialState: { ...initialState,...rehydrate },
+  name: 'root',
+  initialState: { ...initialState, ...rehydrate },
   reducers: {
     addColor: (state, action) => {
-      const color = action.payload;
-      state.color.push(color);
-      localStorage.setItem('color',JSON.stringify(state.color));
+      const color = action.payload
+      state.color.push(color)
+      localStorage.setItem('color', JSON.stringify(state.color))
     },
     removeColor: (state, action) => {
-      // middleware here to change link color setting 
+      // middleware here to change link color setting
       // if number of colors drops below 3
       state.color = state.color.filter(c => c !== action.payload)
-      localStorage.setItem('color',JSON.stringify(state.color));
+      localStorage.setItem('color', JSON.stringify(state.color))
       if (state.color.length < 3) {
-        state.testLinks = false;
-        localStorage.setItem('testLinks',JSON.stringify(false));
+        state.testLinks = false
+        localStorage.setItem('testLinks', JSON.stringify(false))
       }
     },
-    replaceColor: (state, action) =>{
-      console.log("Replace Color")
+    replaceColor: (state, action) => {
+      console.log('Replace Color')
     },
     setProp: (state, action) => {
-      const { name, value } = action.payload;
-      state[name] = value;
-      localStorage.setItem(name,JSON.stringify(state[name]));
+      const { name, value } = action.payload
+      state[name] = value
+      localStorage.setItem(name, JSON.stringify(state[name]))
     },
-    displayWarning: (state, action) => {
-
-    }
+    displayWarning: (state, action) => {}
   }
-});
+})
 
-export const { 
-  addColor, 
-  removeColor, 
-  replaceColor,
-  setProp, 
-  displayWarning 
-} = rootSlice.actions;
-const rootReducer = rootSlice.reducer;
+export const { addColor, removeColor, replaceColor, setProp, displayWarning } = rootSlice.actions
+const rootReducer = rootSlice.reducer
 
-
-const middleware = [
-  ...getDefaultMiddleware(),
-  colorDuplicationCheck
-]
+const middleware = [...getDefaultMiddleware(), colorDuplicationCheck]
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware,
+  middleware
 })
 
-export default store;
+export default store

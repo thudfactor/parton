@@ -1,45 +1,45 @@
-import { useSelector } from "react-redux"
 import ColorCell from '../components/ColorCell'
-import { hex, score } from 'wcag-contrast'
+import { useSelector } from 'react-redux'
+import { hex } from 'wcag-contrast'
 
-const contrast = (c1,c2) => {
-  return Math.round(hex(c1,c2) * 10) / 10;
+const contrast = (c1, c2) => {
+  return Math.round(hex(c1, c2) * 10) / 10
 }
 
 const permutations = (colors, permutationSize, hideFailures = false) => {
-  const collector = [];
-  const colorLength = colors.length;
-  const slots = (colorLength > permutationSize) ? permutationSize : colorLength;
-  const tempArray = Array(slots);
+  const collector = []
+  const colorLength = colors.length
+  const slots = colorLength > permutationSize ? permutationSize : colorLength
+  const tempArray = Array(slots)
 
-  const counters = Array(slots).fill(0);
-  let iter = 0;
+  const counters = Array(slots).fill(0)
+  let iter = 0
   while (counters[0] < colorLength && iter < 5000) {
-    for(let j = 0; j < slots; j++) {
-      const color = colors[counters[j] % colorLength];
-      tempArray[j] = color;
+    for (let j = 0; j < slots; j++) {
+      const color = colors[counters[j] % colorLength]
+      tempArray[j] = color
     }
 
-    if(tempArray.length === new Set(tempArray).size) {
-      collector.push([...tempArray]);
+    if (tempArray.length === new Set(tempArray).size) {
+      collector.push([...tempArray])
     }
-    
+
     // update counters
-    for(let carry = slots - 1; carry >= 0; carry--) {
-      counters[carry] = (counters[carry] + 1);
-      if(counters[carry] % colorLength !== 0) break;
+    for (let carry = slots - 1; carry >= 0; carry--) {
+      counters[carry] = counters[carry] + 1
+      if (counters[carry] % colorLength !== 0) break
     }
 
-    iter++;    
+    iter++
   }
 
   const colorData = collector.map(perm => {
-    const [bgcolor,fgcolor,linkcolor=null] = perm
+    const [bgcolor, fgcolor, linkcolor = null] = perm
     const key = `ColorCell-${perm.join('-')}`
-    const fgbgratio = contrast(fgcolor,bgcolor)
-    const linkfgratio = (linkcolor) ? contrast(fgcolor,linkcolor) : 100
-    const linkbgratio = (linkcolor) ? contrast(linkcolor,bgcolor) : 100
-    const failed = (fgbgratio < 3) || (linkbgratio < 3)
+    const fgbgratio = contrast(fgcolor, bgcolor)
+    const linkfgratio = linkcolor ? contrast(fgcolor, linkcolor) : 100
+    const linkbgratio = linkcolor ? contrast(linkcolor, bgcolor) : 100
+    const failed = fgbgratio < 3 || linkbgratio < 3
 
     return {
       key,
@@ -49,61 +49,55 @@ const permutations = (colors, permutationSize, hideFailures = false) => {
       fgbgratio,
       linkfgratio,
       linkbgratio,
-      failed,
+      failed
     }
   })
 
-  const filtered = colorData.filter(cd => !cd.failed );
+  const filtered = colorData.filter(cd => !cd.failed)
+  const results = hideFailures ? filtered : colorData
 
-  const results = (hideFailures) ? filtered : colorData;
-
-  return [
-    results,
-    filtered.length,
-    colorData.length
-  ]
+  return [results, filtered.length, colorData.length]
 }
-
 
 export default function ColorMatrix() {
   const colors = useSelector(state => state.color)
   const testLinks = useSelector(state => state.testLinks)
   const hideFailures = useSelector(state => state.hideFailures)
 
-  const [permutationSet, resultLength, fullLength] = permutations(colors, testLinks ? 3 : 2, hideFailures);
+  const [permutationSet, resultLength, fullLength] = permutations(colors, testLinks ? 3 : 2, hideFailures)
 
-  let gridClasses = 'w-full grid gap-2 ';
+  let gridClasses = 'w-full grid gap-2 '
 
-  switch(colors.length) {
+  switch (colors.length) {
     case 1:
-      gridClasses += `grid-cols-1`;
-    break;
+      gridClasses += `grid-cols-1`
+      break
     case 2:
-      gridClasses += `grid-cols-2`;
-    break;
+      gridClasses += `grid-cols-2`
+      break
     case 3:
-      gridClasses += `grid-cols-2 md:grid-cols-3`;
-    break;
+      gridClasses += `grid-cols-2 md:grid-cols-3`
+      break
     case 4:
     default:
-      gridClasses += `grid-cols-2 md:grid-cols-4`;
-    break;
+      gridClasses += `grid-cols-2 md:grid-cols-4`
+      break
   }
 
   return (
     <>
       <div>
-        {
-          (resultLength !== fullLength) &&
-          <p>There are { resultLength } passing combinations out of { fullLength } possibilities.</p>
-        }
-        {
-          (resultLength === fullLength) && 
-          <p>There are { resultLength } combinations.</p>
-        }
+        {resultLength !== fullLength && (
+          <p>
+            There are {resultLength} passing combinations out of {fullLength} possibilities.
+          </p>
+        )}
+        {resultLength === fullLength && <p>There are {resultLength} combinations.</p>}
       </div>
       <div className={gridClasses}>
-        { permutationSet.map((cellData) => <ColorCell colors={cellData} key={cellData.key} />) }
+        {permutationSet.map(cellData => (
+          <ColorCell colors={cellData} key={cellData.key} />
+        ))}
       </div>
     </>
   )

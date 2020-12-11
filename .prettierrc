@@ -7,5 +7,7 @@
   "trailingComma": "none",
   "jsxBracketSameLine": true,
   "jsxSingleQuote": false,
-  "quoteProps": "as-needed"
+  "quoteProps": "as-needed",
+  "semi": false,
+  "useTabs": false
 }

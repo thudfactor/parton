@@ -1,10 +1,10 @@
-import ToggleProp from './ToggleProp';
-import RadioProp from './RadioProp';
+import ToggleProp from './ToggleProp'
+import RadioProp from './RadioProp'
 import { largeTreatmentOptions } from '../constants/pref-definitions'
 import { useSelector } from 'react-redux'
 
 export default function Preferences() {
-  const colors = useSelector(state => state.color);
+  const colors = useSelector(state => state.color)
   return (
     <div>
       <ToggleProp name="hideFailures" label="Hide Failures" />
