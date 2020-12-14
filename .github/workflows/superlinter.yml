@@ -1,18 +1,15 @@
 name: Lint Code Base
 on: pull_request
 jobs:
-  super-lint:
+  eslint:
     name: Lint code base
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Lint Code Base
-        uses: github/super-linter@v3
-        env:
-          DEFAULT_BRANCH: trunk
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.json
-          LINTER_RULES_PATH: '/'
-          VALIDATE_JAVASCRIPT_ES: true
-          VALIDATE_CSS: true
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '15'
+      - name: Install modules
+        run: yarn
+      - name: ESLint
+        run: yarn run eslint . --ext .js,.json,.jsx,.tsx,.ts
