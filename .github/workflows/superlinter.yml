@@ -13,3 +13,6 @@ jobs:
           DEFAULT_BRANCH: trunk
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.json
+          LINTER_RULES_PATH: '/'
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_CSS: true
