@@ -2,11 +2,11 @@ import ColorMatrix from './components/ColorMatrix'
 import ColorSelect from './components/ColorSelect'
 import Preferences from './components/Preferences'
 import ColorSwatches from './components/ColorSwatches'
-import { StyledForm } from './styles'
+import 'twin.macro'
 
 function App() {
   return (
-    <StyledForm>
+    <main tw="flex flex-col justify-center items-start bg-gray-100">
       <ColorSelect />
       <ColorSwatches />
       <div className="forms">
@@ -14,7 +14,7 @@ function App() {
       </div>
 
       <ColorMatrix />
-    </StyledForm>
+    </main>
   )
 }
 

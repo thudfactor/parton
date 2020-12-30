@@ -1,0 +1,30 @@
+name: status-check
+on: [pull_request]
+
+jobs:
+  check_status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '15'
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: /usr/local/share/.cache/yarn
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: yarn
+      - name: Unit Test
+        run: yarn test
+      - name: Formatting Test
+        run: yarn prettier -c ./src/**/* ./cypress/integration/**/*
+      - name: Linting Test
+        run: yarn eslint ./src/**/*.js ./cypress/integration/**/*.js

@@ -1,7 +1,7 @@
-import { ColorCellWrapper, Swatch, Details, Link } from '../styles/'
 import InfoCell from './InfoCell'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import tw from 'twin.macro'
 
 const ColorCell = ({ colors }) => {
   const { bgcolor, fgcolor, linkcolor, fgbgratio, linkfgratio, linkbgratio, failed } = colors
@@ -34,24 +34,29 @@ const ColorCell = ({ colors }) => {
   const linkDecoration = linkfgratio <= 3 ? 'underline' : 'none'
 
   return (
-    <ColorCellWrapper bgcolor={bgcolor} failed={failed}>
-      <Swatch fontSize={swatchFontSize} fontWeight={swatchFontWeight} fgcolor={fgcolor}>
+    <div
+      tw="flex flex-col justify-between border-2"
+      css={[failed && tw`border-red-500`]}
+      style={{ backgroundColor: bgcolor }}>
+      <div tw="p-2" style={{ color: fgcolor, fontSize: swatchFontSize, fontWeight: swatchFontWeight }}>
         Harry, jogging quickly, axed zen monks with beef vapor.{' '}
         {linkcolor && (
-          <Link
-            fontSize={linkFontSize}
-            fontWeight={linkFontWeight}
-            linkcolor={linkcolor}
-            linkDecoration={linkDecoration}
+          <a
+            style={{
+              textDecoration: linkDecoration,
+              color: linkcolor,
+              fontSize: linkFontSize,
+              fontWeight: linkFontWeight
+            }}
             onClick={e => {
               e.preventDefault()
             }}
             href="http://www.example.com">
             Click Here for More Info
-          </Link>
+          </a>
         )}
-      </Swatch>
-      <Details>
+      </div>
+      <div tw="grid grid-cols-2 p-2 bg-black text-white text-sm">
         <dl>
           <InfoCell label={'BG'}>{bgcolor}</InfoCell>
           <InfoCell label={'FG'}>{fgcolor}</InfoCell>
@@ -62,8 +67,8 @@ const ColorCell = ({ colors }) => {
           {linkcolor && <InfoCell label={'A:BG'}>{linkbgratio}</InfoCell>}
           {linkcolor && <InfoCell label={'A:FG'}>{linkfgratio}</InfoCell>}
         </dl>
-      </Details>
-    </ColorCellWrapper>
+      </div>
+    </div>
   )
 }
 

@@ -3,8 +3,11 @@
     "ecmaVersion": 2021,
     "sourceType": "module",
     "impliedStrict": true,
+    "project": "./jsconfig.json",
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true
     }
   },
   "env": {
@@ -14,17 +17,24 @@
     "jest": true
   },
   "extends": [
+    "react-app",
     "eslint:recommended",
+    "prettier",
     "plugin:json/recommended",
     "plugin:react/recommended",
-    "plugin:prettier/recommended"
+    "plugin:jest/recommended",
+    "plugin:cypress/recommended"
   ],
-  "plugins": ["prettier", "json", "react"],
+  "plugins": ["json", "react", "jest", "cypress"],
   "settings": {
-    "react": "detect"
+    "react": {
+      "version": "detect"
+    }
   },
   "rules": {
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": 0,
+    "react/jsx-pascal-case": 0,
+    "jest/expect-expect": 0
   },
   "globals": {
     "React": "writable"

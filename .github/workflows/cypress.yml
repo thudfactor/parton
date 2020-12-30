@@ -1,0 +1,14 @@
+name: cypress
+on: [pull_request]
+
+jobs:
+  check_cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: E2E Test
+        uses: cypress-io/github-action@v2.7.0
+        with:
+          start: 'yarn server:start'
+          build: 'yarn build'
+          command: 'yarn cy:run'

@@ -3,11 +3,12 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import store from './js/store/index'
 import App from './js/App'
-import './assets/styles.css'
+import { GlobalStyles } from 'twin.macro'
 import reportWebVitals from './reportWebVitals'
 
 render(
   <React.StrictMode>
+    <GlobalStyles />
     <Provider store={store}>
       <App />
     </Provider>

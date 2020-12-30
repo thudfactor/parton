@@ -1,6 +1,7 @@
 import ColorCell from '../components/ColorCell'
 import { useSelector } from 'react-redux'
 import { hex } from 'wcag-contrast'
+import 'twin.macro'
 
 const contrast = (c1, c2) => {
   return Math.round(hex(c1, c2) * 10) / 10
@@ -66,24 +67,6 @@ export default function ColorMatrix() {
 
   const [permutationSet, resultLength, fullLength] = permutations(colors, testLinks ? 3 : 2, hideFailures)
 
-  let gridClasses = 'w-full grid gap-2 '
-
-  switch (colors.length) {
-    case 1:
-      gridClasses += `grid-cols-1`
-      break
-    case 2:
-      gridClasses += `grid-cols-2`
-      break
-    case 3:
-      gridClasses += `grid-cols-2 md:grid-cols-3`
-      break
-    case 4:
-    default:
-      gridClasses += `grid-cols-2 md:grid-cols-4`
-      break
-  }
-
   return (
     <>
       <div>
@@ -94,7 +77,7 @@ export default function ColorMatrix() {
         )}
         {resultLength === fullLength && <p>There are {resultLength} combinations.</p>}
       </div>
-      <div className={gridClasses}>
+      <div tw="w-full grid gap-2 grid-cols-2  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {permutationSet.map(cellData => (
           <ColorCell colors={cellData} key={cellData.key} />
         ))}
