@@ -20,7 +20,7 @@ Object.keys(initialState).forEach(key => {
   if (retrieved) {
     rehydrate[key] = JSON.parse(retrieved)
   } else {
-    console.log('Nope', key)
+    //console.log('Nope', key)
   }
 })
 
@@ -44,7 +44,7 @@ const rootSlice = createSlice({
       }
     },
     replaceColor: (state, action) => {
-      console.log('Replace Color')
+      //console.log('Replace Color')
     },
     setProp: (state, action) => {
       const { name, value } = action.payload

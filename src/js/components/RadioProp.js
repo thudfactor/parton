@@ -28,7 +28,7 @@ const RadioProp = ({ label, name, options }) => {
 RadioProp.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string,
-  options: PropTypes.object
+  options: PropTypes.array
 }
 
 export default RadioProp

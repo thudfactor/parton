@@ -11,7 +11,7 @@ const InfoCell = ({ label, children }) => {
 
 InfoCell.propTypes = {
   label: PropTypes.string,
-  children: PropTypes.array
+  children: PropTypes.node
 }
 
 export default InfoCell
